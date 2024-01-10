@@ -1,6 +1,10 @@
-﻿using DesingPatterns.Decorator;
-using DesingPatterns.Stateg;
-using DesingPatterns.Template_Method;
+﻿//using DesingPatterns.Builder;
+//using DesingPatterns.Decorator;
+//using DesingPatterns.State;
+////using DesingPatterns.Stateg;
+//using DesingPatterns.Template_Method;
+
+using DesingPatterns.Observer;
 
 public class TesteDeImpostos
 {
@@ -37,12 +41,52 @@ public class TesteDeImpostos
         //Console.WriteLine(valor);
         //Console.WriteLine(valor2);
 
-        //Decorator
-        Orcamento orcamento = new Orcamento(500, new Item("lapis", 100));
-        ICCP iCCP = new ICCP(new DesingPatterns.Decorator.ICMS());
-        IMA ima = new IMA(new ICCP());
-        
-        Console.WriteLine(iCCP.Calcula(orcamento));
-        Console.WriteLine(ima.Calcula(orcamento));
+        ////Decorator
+        //Orcamento orcamento = new Orcamento(500, new Item("lapis", 100));
+        //ICCP iCCP = new ICCP(new DesingPatterns.Decorator.ICMS());
+        //IMA ima = new IMA(new ICCP());
+
+        //Console.WriteLine(iCCP.Calcula(orcamento));
+        //Console.WriteLine(ima.Calcula(orcamento));
+
+        //State
+        //Orcamento orcamento = new Orcamento(500);
+        //orcamento.AplicaDescontoDiferencial();
+        //orcamento.Aprova();
+        //orcamento.Aprova();
+
+        ////Builder
+        //NFBuilder criadorNF = new NFBuilder();
+        //ItemNotaBuilder itemNotaBuilder = new ItemNotaBuilder();
+        //ItemNota itemNota = itemNotaBuilder.ComNome("Item 1").ComValor(200).Builder();
+        //criadorNF.ComCnpj("10.203.203/0001-10")
+        //          .ComRazaoSocial("Renan Brickes LTDA")
+        //           .ComData()
+        //            .ComImposto(100)
+        //             .ComValorBruto(200)
+        //              .ComItem(itemNota)
+        //               .ComObeservacao("Teste");
+
+        //NF nf = criadorNF.BuilderNF();
+        //Console.WriteLine(nf.ValorBruto);
+        //Console.WriteLine(nf.Imposto);
+
+        //Observer
+        NFBuilder criadorNF = new NFBuilder();
+        criadorNF.ComCnpj("10.203.203/0001-10")
+                  .ComRazaoSocial("Renan Brickes LTDA")
+                   .ComData()
+                    .ComImposto(100)
+                     .ComValorBruto(200)
+                      .ComItem(new ItemNota("item 1", 200))
+                       .ComObeservacao("Teste");
+
+        criadorNF.NovaAcao(new AcaoBanco());
+        criadorNF.NovaAcao(new AcaoSms());
+        criadorNF.NovaAcao(new AcaoEmail());
+        NF nf = criadorNF.BuilderNF();
+        Console.WriteLine(nf.ValorBruto);
+        Console.WriteLine(nf.Imposto);
+
     }
 }
